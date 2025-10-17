@@ -1,0 +1,35 @@
+{
+  "name": "hmazter/clockwork-livewire-data-source",
+  "description": "Laravel Livewire data source for Clockwork",
+  "type": "library",
+  "license": "MIT",
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "Kristoffer Högberg"
+    }
+  ],
+  "require": {
+    "php": "^8.4",
+    "illuminate/support": "^12.0",
+    "itsgoingd/clockwork": "^5.3",
+    "livewire/livewire": "^3.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hmazter\\ClockworkLivewireDataSource\\": "src/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Hmazter\\ClockworkLivewireDataSource\\ClockworkLivewireServiceProvider"
+      ],
+      "aliases": {
+      }
+    }
+  }
+}
