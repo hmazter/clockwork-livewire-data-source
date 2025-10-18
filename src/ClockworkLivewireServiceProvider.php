@@ -9,7 +9,7 @@ use Livewire\LivewireManager;
 
 class ClockworkLivewireServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         /** @var Clockwork $clockwork */
         $clockwork = $this->app->make('clockwork');

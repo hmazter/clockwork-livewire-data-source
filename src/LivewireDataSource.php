@@ -14,6 +14,9 @@ class LivewireDataSource extends DataSource
     /** @var array<mixed> */
     protected array $components = [];
 
+    /** @var array<mixed> */
+    protected array $events = [];
+
     public function __construct(private LivewireManager $livewireManager, private Request $request)
     {
     }
@@ -21,8 +24,20 @@ class LivewireDataSource extends DataSource
     public function listenForLivewireEvents(): self
     {
         $this->livewireManager->listen('profile', function (string $event, string $id, array $timing) {
-            // add livewire events to the timeline
-            clock()->event("livewire:$event - $id", ['color' => 'blue'])->finalize(...$timing);
+            $this->events[] = [
+                'event' => $event,
+                'id' => $id,
+                'timing' => $timing,
+            ];
+        });
+        $this->livewireManager->listen('hydrate', function (...$args) {
+            clock('hydrate', $args);
+        });
+        $this->livewireManager->listen('render', function (...$args) {
+            clock('render', $args);
+        });
+        $this->livewireManager->listen('mount', function (...$args) {
+            clock('mount', $args);
         });
 
         $this->livewireManager->listen('render', function (Component $component) {
@@ -49,12 +64,18 @@ class LivewireDataSource extends DataSource
 
     public function resolve(ClockworkRequest $clockwork): ClockworkRequest
     {
-        // Create the "Livewire"-tab
-        $livewireTab = $clockwork->userData('livewire')->title('Livewire');
-
-        // add a table with all Livewire components loaded during the request
+        // add a table with all Livewire components rendered during the request
         if (! empty($this->components)) {
-            $livewireTab->table('Components', $this->components);
+            $clockwork->userData('livewire')
+                ->title('Livewire')
+                ->table('Components', $this->components);
+        }
+
+        // add livewire events to the timeline
+        foreach ($this->events as $event) {
+            $clockwork->timeline()
+                ->event("livewire:{$event['event']} - {$event['id']}", ['color' => 'blue'])
+                ->finalize($event['timing'][0], $event['timing'][1]);
         }
 
         return $clockwork;
