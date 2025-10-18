@@ -1,4 +1,4 @@
-Laravel Livewire data source for Clockwork
+# Laravel Livewire data source for Clockwork
 
 ### Livewire events and arguments
 
@@ -7,6 +7,7 @@ These are the events that Livewire dispatches and the attributes for each event
 - `mount` - $component, $params, $key, $parent
 - `render` - $component, $view, $properties
 - `call` - $root, $method, $params, $context, $returnEarly
+- `update` - $component, $path, $value
 - `hydrate` - $component, $memo, $context
 - `dehydrate` - $component, $context
 - `destroy` - $component, $context
@@ -19,10 +20,11 @@ These are the events that Livewire dispatches and the attributes for each event
 
 #### Updating a model in a Livewire component
 - hydrate
+- update
 - render
 - dehydrate
 
-#### call a method on a  Livewire component
+#### Call a method on a  Livewire component
 - hydrate
 - call
 - render
