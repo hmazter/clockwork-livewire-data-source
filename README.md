@@ -10,4 +10,20 @@ These are the events that Livewire dispatches and the attributes for each event
 - `hydrate` - $component, $memo, $context
 - `dehydrate` - $component, $context
 - `destroy` - $component, $context
-- `profile` (only with `app.debug`) - $event, $id, $timings($start, $finis)
+- `profile` (only with `app.debug`) - $event, $id, $timings(start, finis)
+
+#### Loading a page with a Livewire component
+- mount
+- render
+- dehydrate
+
+#### Updating a model in a Livewire component
+- hydrate
+- render
+- dehydrate
+
+#### call a method on a  Livewire component
+- hydrate
+- call
+- render
+- dehydrate

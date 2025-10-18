@@ -14,49 +14,63 @@ class LivewireDataSource extends DataSource
     /** @var array<mixed> */
     protected array $components = [];
 
-    /** @var array<mixed> */
+    /** @var array{event:string, id:string, start:int, finish:int}[] */
     protected array $events = [];
 
-    public function __construct(private LivewireManager $livewireManager, private Request $request)
+    public function __construct(private LivewireManager $livewireManager)
     {
     }
 
     public function listenForLivewireEvents(): self
     {
+        /*
+         * Listen to the "profile" event, which contains profiling info about the other events, including start and finish timestamps
+         */
         $this->livewireManager->listen('profile', function (string $event, string $id, array $timing) {
             $this->events[] = [
                 'event' => $event,
                 'id' => $id,
-                'timing' => $timing,
+                'start' => $timing[0],
+                'finish' => $timing[1],
             ];
         });
-        $this->livewireManager->listen('hydrate', function (...$args) {
-            clock('hydrate', $args);
+
+        /*
+         * Get properties that is passed to the Component in the "mount" event
+         */
+        $this->livewireManager->listen('mount', function (Component $component, $properties) {
+            $this->components[$component->id()]['Component'] = $component::class;
+            $this->components[$component->id()]['Id'] = $component->id();
+            $this->components[$component->id()]['Properties'] = $properties;
         });
-        $this->livewireManager->listen('render', function (...$args) {
-            clock('render', $args);
+
+        /*
+         * Get which Component properties that receives updates
+         */
+        $this->livewireManager->listen('update', function ($component, $path, $value) {
+            $this->components[$component->id()]['Component'] = $component::class;
+            $this->components[$component->id()]['Id'] = $component->id();
+            $this->components[$component->id()]['Updates'][$path] = $value;
         });
-        $this->livewireManager->listen('mount', function (...$args) {
-            clock('mount', $args);
+
+        /*
+         * Which Component method has been called, with which params
+         */
+        $this->livewireManager->listen('call', function (Component $component, $method, $params) {
+            $this->components[$component->id()]['Component'] = $component::class;
+            $this->components[$component->id()]['Id'] = $component->id();
+            $this->components[$component->id()]['Method'] = $method;
+            $this->components[$component->id()]['Params'] = $params ?: '';
         });
 
         $this->livewireManager->listen('render', function (Component $component) {
-            $data = [
+            // set new values in the array for a consistent ordering of columns in the resulting table
+            $this->components[$component->id()] = [
                 'Component' => $component::class,
                 'Id' => $component->id(),
-                'Properties' => $component->all(),
+                'Properties' => '',
+                ...$this->components[$component->id()] ?? [],
             ];
-
-            if ($this->request->path() === 'livewire/update') {
-                // parse some additional data for livewire requests
-                $components = $this->request->array('components');
-                $data['Method'] = $components[0]['calls'][0]['method'] ?? '';
-                if (isset($components[0]['updates']) && ! empty($components[0]['updates'])) {
-                    $data['Updates'] = $components[0]['updates'];
-                }
-            }
-
-            $this->components[] = $data;
         });
 
         return $this;
@@ -75,7 +89,7 @@ class LivewireDataSource extends DataSource
         foreach ($this->events as $event) {
             $clockwork->timeline()
                 ->event("livewire:{$event['event']} - {$event['id']}", ['color' => 'blue'])
-                ->finalize($event['timing'][0], $event['timing'][1]);
+                ->finalize($event['start'], $event['finish']);
         }
 
         return $clockwork;
