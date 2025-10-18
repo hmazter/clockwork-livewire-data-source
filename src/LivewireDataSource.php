@@ -2,10 +2,8 @@
 
 namespace Hmazter\ClockworkLivewireDataSource;
 
-
 use Clockwork\DataSource\DataSource;
 use Clockwork\Request\Request as ClockworkRequest;
-use Illuminate\Http\Request;
 use Livewire\Component;
 use Livewire\LivewireManager;
 
@@ -17,9 +15,7 @@ class LivewireDataSource extends DataSource
     /** @var array{event:string, id:string, start:int, finish:int}[] */
     protected array $events = [];
 
-    public function __construct(private LivewireManager $livewireManager)
-    {
-    }
+    public function __construct(private LivewireManager $livewireManager) {}
 
     public function listenForLivewireEvents(): self
     {
