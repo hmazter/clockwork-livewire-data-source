@@ -2,7 +2,11 @@
 
 ## Features
 
-TODO
+### New tab with table of rendered components
+<img alt="component list" src="docs/component-list.png" width="600"/>
+
+### Livewire events added to timeline
+<img alt="timeline" src="docs/timeline.png" width="600"/>
 
 ## Getting started
 
