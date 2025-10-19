@@ -9,10 +9,8 @@ use Livewire\LivewireManager;
 
 class LivewireDataSource extends DataSource
 {
-    /** @var array<mixed> */
     protected array $components = [];
 
-    /** @var array{event:string, id:string, start:int, finish:int}[] */
     protected array $events = [];
 
     public function __construct(private LivewireManager $livewireManager) {}
