@@ -1,5 +1,13 @@
 # Laravel Livewire data source for Clockwork
 
+## Features
+
+TODO
+
+## Getting started
+
+TODO
+
 ### Livewire events and arguments
 
 These are the events that Livewire dispatches and the attributes for each event
@@ -11,7 +19,7 @@ These are the events that Livewire dispatches and the attributes for each event
 - `hydrate` - $component, $memo, $context
 - `dehydrate` - $component, $context
 - `destroy` - $component, $context
-- `profile` (only with `app.debug`) - $event, $id, $timings(start, finis)
+- `profile` - $event, $id, $timings(start, finish) - (only dispatched with `app.debug = true`)
 
 #### Loading a page with a Livewire component
 - mount
