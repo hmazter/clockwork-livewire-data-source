@@ -35,7 +35,7 @@ class LivewireDataSource extends DataSource
          * Get properties that is passed to the Component in the "mount" event
          */
         $this->livewireManager->listen('mount', function (Component $component, $properties) {
-            $this->components[$component->id()]['Component'] = $component::class;
+            $this->components[$component->id()]['Component'] = $component->getName();
             $this->components[$component->id()]['Id'] = $component->id();
             $this->components[$component->id()]['Properties'] = $properties;
         });
@@ -44,7 +44,7 @@ class LivewireDataSource extends DataSource
          * Get which Component properties that receives updates
          */
         $this->livewireManager->listen('update', function ($component, $path, $value) {
-            $this->components[$component->id()]['Component'] = $component::class;
+            $this->components[$component->id()]['Component'] = $component->getName();
             $this->components[$component->id()]['Id'] = $component->id();
             $this->components[$component->id()]['Updates'][$path] = $value;
         });
@@ -53,7 +53,7 @@ class LivewireDataSource extends DataSource
          * Which Component method has been called, with which params
          */
         $this->livewireManager->listen('call', function (Component $component, $method, $params) {
-            $this->components[$component->id()]['Component'] = $component::class;
+            $this->components[$component->id()]['Component'] = $component->getName();
             $this->components[$component->id()]['Id'] = $component->id();
             $this->components[$component->id()]['Method'] = $method;
             $this->components[$component->id()]['Params'] = $params ?: '';
@@ -62,7 +62,7 @@ class LivewireDataSource extends DataSource
         $this->livewireManager->listen('render', function (Component $component) {
             // set new values in the array for a consistent ordering of columns in the resulting table
             $this->components[$component->id()] = [
-                'Component' => $component::class,
+                'Component' => $component->getName(),
                 'Id' => $component->id(),
                 'Properties' => '',
                 ...$this->components[$component->id()] ?? [],
