@@ -95,5 +95,6 @@ class LivewireDataSource extends DataSource
     public function reset(): void
     {
         $this->components = [];
+        $this->events = [];
     }
 }
