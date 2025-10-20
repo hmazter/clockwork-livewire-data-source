@@ -30,7 +30,7 @@ class LivewireDataSource extends DataSource
         });
 
         /*
-         * Get properties that is passed to the Component in the "mount" event
+         * Get properties that are passed to the Component in the "mount" event
          */
         $this->livewireManager->listen('mount', function (Component $component, $properties) {
             $this->components[$component->id()]['Component'] = $component->getName();
@@ -39,16 +39,16 @@ class LivewireDataSource extends DataSource
         });
 
         /*
-         * Get which Component properties that receives updates
+         * Get which Component properties that receive updates
          */
-        $this->livewireManager->listen('update', function ($component, $path, $value) {
+        $this->livewireManager->listen('update', function (Component $component, string $path, mixed $value) {
             $this->components[$component->id()]['Component'] = $component->getName();
             $this->components[$component->id()]['Id'] = $component->id();
             $this->components[$component->id()]['Updates'][$path] = $value;
         });
 
         /*
-         * Which Component method has been called, with which params
+         * Get which Component method has been called, and with what params
          */
         $this->livewireManager->listen('call', function (Component $component, $method, $params) {
             $this->components[$component->id()]['Component'] = $component->getName();
@@ -57,6 +57,9 @@ class LivewireDataSource extends DataSource
             $this->components[$component->id()]['Params'] = $params ?: '';
         });
 
+        /*
+         * Listen for component render
+         */
         $this->livewireManager->listen('render', function (Component $component) {
             // set new values in the array for a consistent ordering of columns in the resulting table
             $this->components[$component->id()] = [
