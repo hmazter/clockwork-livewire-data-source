@@ -33,6 +33,10 @@
   "config": {
     "sort-packages": true
   },
+  "scripts": {
+    "test": "@php ./vendor/bin/phpunit",
+    "lint": "@php ./vendor/bin/pint"
+  },
   "extra": {
     "laravel": {
       "providers": [
