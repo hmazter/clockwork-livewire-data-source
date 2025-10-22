@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         php: [ '8.3', '8.4' ]
+        dependency-version: ['prefer-lowest', 'prefer-stable']
     steps:
       - uses: actions/checkout@v5
 
@@ -33,11 +34,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-composer-${{ matrix.dependency-version }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-${{ matrix.dependency-version }}-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
       - name: Run test suite
         run: composer test
