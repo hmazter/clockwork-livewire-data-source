@@ -16,15 +16,26 @@
     "livewire/livewire": "^3.6"
   },
   "require-dev": {
-    "laravel/pint": "^1.25"
+    "laravel/pint": "^1.25",
+    "mockery/mockery": "^1.6",
+    "phpunit/phpunit": "^12.4"
   },
   "autoload": {
     "psr-4": {
       "Hmazter\\ClockworkLivewireDataSource\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
   "config": {
     "sort-packages": true
+  },
+  "scripts": {
+    "test": "@php ./vendor/bin/phpunit",
+    "lint": "@php ./vendor/bin/pint"
   },
   "extra": {
     "laravel": {
