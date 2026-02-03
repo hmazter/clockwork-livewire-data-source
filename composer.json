@@ -3,7 +3,7 @@
   "description": "Laravel Livewire data source for Clockwork",
   "type": "library",
   "license": "MIT",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "authors": [
     {
       "name": "Kristoffer Högberg"
